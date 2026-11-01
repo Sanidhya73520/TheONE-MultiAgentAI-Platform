@@ -7,7 +7,7 @@
   "scripts": {
     "postinstall": "npm run install-services",
     "install-services": "npm --prefix gateway install && npm --prefix services/auth install && npm --prefix services/chat install && npm --prefix services/agent install && npm --prefix services/billing install",
-    "build": "npm run install-services",
+    "build": "npm install && npm run install-services",
     "start": "node start.js",
     "start:gateway": "cd gateway && node index.js",
     "start:auth": "cd services/auth && node index.js",

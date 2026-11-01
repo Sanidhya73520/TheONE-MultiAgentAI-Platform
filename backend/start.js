@@ -1,12 +1,30 @@
 import { spawn } from "child_process";
 import path from "path";
 import { fileURLToPath } from "url";
-import dotenv from "dotenv";
+import fs from "fs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// Load backend root .env if present
-dotenv.config({ path: path.join(__dirname, ".env") });
+// Load backend root .env if present (Zero external dependencies)
+const envPath = path.join(__dirname, ".env");
+if (fs.existsSync(envPath)) {
+  try {
+    const envContent = fs.readFileSync(envPath, "utf-8");
+    for (const line of envContent.split("\n")) {
+      const trimmed = line.trim();
+      if (trimmed && !trimmed.startsWith("#") && trimmed.includes("=")) {
+        const idx = trimmed.indexOf("=");
+        const key = trimmed.slice(0, idx).trim();
+        const val = trimmed.slice(idx + 1).trim().replace(/^["']|["']$/g, "");
+        if (key && !process.env[key]) {
+          process.env[key] = val;
+        }
+      }
+    }
+  } catch (err) {
+    console.warn("Could not read local .env file:", err.message);
+  }
+}
 
 console.log("==================================================");
 console.log(" Starting The ONE Multi-Agent AI Platform Backend ");
