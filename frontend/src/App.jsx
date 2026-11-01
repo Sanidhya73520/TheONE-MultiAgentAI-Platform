@@ -1,5 +1,5 @@
 import React from 'react'
-import Home from './pages/home.jsx'
+import Home from './pages/Home.jsx'
 import { useEffect } from 'react'
 import getCurrentUser from './features/getCurrentUser.js'
 import { useDispatch } from 'react-redux'
