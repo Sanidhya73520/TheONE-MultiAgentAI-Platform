@@ -69,7 +69,8 @@ payment.paymentId = razorpay_payment_id;
 
 await payment.save();
 
-await axios.post(`${process.env.AUTH_SERVICE}/update-plan`, {
+const authService = process.env.AUTH_SERVICE || "http://127.0.0.1:8001";
+await axios.post(`${authService}/update-plan`, {
   userId: payment.userId,
   plan: payment.plan,
   credits: payment.credits,

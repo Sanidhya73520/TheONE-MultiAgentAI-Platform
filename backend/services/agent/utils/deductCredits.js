@@ -2,7 +2,8 @@ import axios from "axios"
 
 export const deductCredits=async (userId,agent)=>{
     try {
-        const {data}=await axios.post(`${process.env.AUTH_SERVICE}/deduct-credits`,{userId,agent})
+        const authService = process.env.AUTH_SERVICE || "http://127.0.0.1:8001";
+        const {data}=await axios.post(`${authService}/deduct-credits`,{userId,agent})
         return data
     } catch (error) {
         console.log(error)

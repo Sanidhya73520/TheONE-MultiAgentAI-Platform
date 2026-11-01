@@ -5,7 +5,7 @@ import router  from "./routes/agent.route.js";
 
 dotenv.config();
 
-const port = process.env.PORT
+const port = process.env.PORT || 8003;
 
 const app = express();
 app.use(express.json());
@@ -15,10 +15,10 @@ app.use((err, req, res, next) => {
     console.log(err)
 
     if (err.status) {
-return res.status(err.status).json(err.data);
+        return res.status(err.status).json(err.data);
     }
 
-    return res.status(500).json({ message: `Agent Internal Error ${error}` });
+    return res.status(500).json({ message: `Agent Internal Error ${err?.message || err}` });
 })
 
 app.get("/", (req, res) => {

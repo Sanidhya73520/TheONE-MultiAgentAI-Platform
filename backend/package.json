@@ -1,16 +1,25 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "The ONE Multi-Agent AI Platform Backend",
+  "main": "start.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "postinstall": "npm run install-services",
+    "install-services": "npm --prefix gateway install && npm --prefix services/auth install && npm --prefix services/chat install && npm --prefix services/agent install && npm --prefix services/billing install",
+    "build": "npm run install-services",
+    "start": "node start.js",
+    "start:gateway": "cd gateway && node index.js",
+    "start:auth": "cd services/auth && node index.js",
+    "start:chat": "cd services/chat && node index.js",
+    "start:agent": "cd services/agent && node index.js",
+    "start:billing": "cd services/billing && node index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "module",
   "dependencies": {
+    "dotenv": "^17.4.2",
     "ioredis": "^6.0.0"
   }
 }

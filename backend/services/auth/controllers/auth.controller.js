@@ -41,11 +41,11 @@ export const login = async (req, res) => {
       "EX",
       7 * 24 * 60 * 60,
     );
-
+    const isDev = process.env.NODE_ENV === "development";
     res.cookie("session", sessionId, {
       httpOnly: true,
-      secure: true,
-      sameSite: "none", //change to none while deployment.
+      secure: !isDev,
+      sameSite: !isDev ? "none" : "lax",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
     return res.status(200).json(user);
@@ -58,8 +58,15 @@ export const login = async (req, res) => {
 export const logout = async (req, res) => {
   try {
     const sessionId = req.cookies?.session;
-    await redis.del(`session-${sessionId}`);
-    res.clearCookie("session");
+     if (sessionId) {
+      await redis.del(`session-${sessionId}`);
+    }
+    const isDev = process.env.NODE_ENV === "development";
+    res.clearCookie("session", {
+      httpOnly: true,
+      secure: !isDev,
+      sameSite: !isDev ? "none" : "lax",
+    });
 
     return res.status(200).json({ message: "Logout Successful" });
   } catch (error) {

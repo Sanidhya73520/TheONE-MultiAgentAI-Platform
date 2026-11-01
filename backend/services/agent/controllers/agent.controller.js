@@ -10,7 +10,8 @@ export const agent = async (req, res, next) => {
     const userId = req.headers["x-user-id"];
     console.log("1. Saving message...");
 
-    await axios.post(`${process.env.CHAT_SERVICE}/save-message`, {
+    const chatService = process.env.CHAT_SERVICE || "http://127.0.0.1:8002";
+    await axios.post(`${chatService}/save-message`, {
       conversationId,
       role: "user",
       content: prompt,
@@ -32,7 +33,7 @@ export const agent = async (req, res, next) => {
     await addMessage(conversationId, "user", prompt);
 
     await addMessage(conversationId, "assistant", response);
-    await axios.post(`${process.env.CHAT_SERVICE}/save-message`, {
+    await axios.post(`${chatService}/save-message`, {
       conversationId,
       role: "assistant",
       content: response,
